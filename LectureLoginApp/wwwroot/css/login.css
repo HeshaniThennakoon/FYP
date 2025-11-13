@@ -1,0 +1,132 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #a68dfd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.illustration {
+    flex: 1; /* take available space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #a68dfd; /* same purple background */
+}
+
+.illustration img {
+    width: 100%;
+    height: 100vh;   /* make it fill full height */
+    object-fit: cover; /* ensures it scales properly */
+}
+
+
+.login-box {
+    flex: 0 0 400px;       /* fixed width */
+    display: flex;         /* center content */
+    flex-direction: column;
+    justify-content: center;  /* vertical center */
+    align-items: center;      /* horizontal center */
+    padding: 40px;
+    background: #fff;
+    height: 60vh;             /* slightly smaller height */
+    margin-right: 40px;       /* gap from right corner */
+    margin-left: 40px;        /* gap from left corner */
+    border-radius: 16px;      /* optional rounded corners */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+
+
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #6b21a8;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #9333ea;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background: #6b21a8;
+}
+
+.role-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 20px;   /* <-- adds space between Student & Teacher */
+    margin-bottom: 20px;
+}
+
+.role-toggle label {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #f3e8ff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.role-toggle input[type="radio"] {
+    display: none; /* hide default radio button */
+}
+
+.role-toggle input[type="radio"]:checked + label {
+    background: #9333ea;
+    color: white;
+}
+
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+.forgot-password {
+    width: 100%;
+    text-align: right;
+    margin: 8px 0 16px 0;
+}
+
+.forgot-password a {
+    font-size: 14px;
+    color: #9333ea;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+    color: #6b21a8;
+}

@@ -1,0 +1,64 @@
+@model List<LectureLoginApp.Models.Student>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lecturer Dashboard</title>
+    <link rel="stylesheet" href="~/css/lecturer.css" />
+</head>
+<body>
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Students List & Status</h3>
+            <ul>
+                @foreach (var s in Model)
+                {
+                    <li class="student-item">
+                        <div class="icon">
+                            <span class="avatar"></span>
+                            @if (s.IsOnline)
+                            {
+                                <span class="status online"></span>
+                            }
+                            else
+                            {
+                                <span class="status offline"></span>
+                            }
+                        </div>
+                        <span>@s.Name</span>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            
+            <!-- Top buttons -->
+            <div class="top-buttons">
+                <button class="mode-btn">Lecture Mode</button>
+                <button class="mode-btn">Quiz Mode</button>
+                <button class="mode-btn">Group Activity</button>
+            </div>
+
+            <!-- Student info card -->
+            <div class="student-card">
+                <div class="student-header">
+                    <span><b>Student 01</b></span>
+                    <span>Index: 12345</span>
+                    <span>Cam ID: 12345</span>
+                </div>
+                <div class="student-video">
+                    <span class="avatar-big"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

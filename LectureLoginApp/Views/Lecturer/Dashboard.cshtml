@@ -1,0 +1,175 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lecturer Dashboard</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">Dashboard</h2>
+            <ul class="menu">
+                <li><a href="#">Students List & Status</a></li>
+                <li><a href="#">Alerts & Notifications</a></li>
+                <li><a href="#">Quiz Management</a></li>
+                <li><a href="#">Report & Analytics</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Navigation -->
+            <div class="topbar">
+                <div class="modes">
+                    <button class="mode-btn active" data-mode="lecture">Lecture Mode</button>
+                    <button class="mode-btn" data-mode="quiz">Quiz Mode</button>
+                    <button class="mode-btn" data-mode="group">Group Activity</button>
+                </div>
+                <div class="icons">
+                    <i class="fa fa-bell"></i>
+                    <i class="fa fa-user-circle"></i>
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="content">
+
+                <!-- Left Section (Students List / Quiz / Group) -->
+                <div class="left-content">
+                    <!-- Lecture Mode -->
+                    <div class="mode-section" id="lecture" style="display:block;">
+                        <div class="students-list">
+                            <h3>Students Started List</h3>
+                            <ul>
+                                <li><i class="fa fa-user"></i> Student 01</li>
+                                <li><i class="fa fa-user"></i> Student 02</li>
+                                <li><i class="fa fa-user"></i> Student 03</li>
+                            </ul>
+                        </div>
+
+                        <div class="chat-box">
+                            <h3>Live Chat</h3>
+                            <div class="messages">
+                                <div class="msg">Hello Lecturer!</div>
+                                <div class="msg lecturer">Welcome Student</div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" placeholder="Type a message..." />
+                                <button><i class="fa fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Mode -->
+                    <div class="mode-section" id="quiz" style="display:none; flex-direction: row; gap: 20px;">
+                        
+                        <!-- Left Panel: Students who attended -->
+                        <div class="quiz-students">
+                            <h3>Student Who Attend to the Quiz</h3>
+                            <ul>
+                                <li><i class="fa fa-user"></i> Student 01</li>
+                                <li><i class="fa fa-user"></i> Student 02</li>
+                                <li><i class="fa fa-user"></i> Student 03</li>
+                                <li><i class="fa fa-user"></i> Student 04</li>
+                                <li><i class="fa fa-user"></i> Student 05</li>
+                                <li><i class="fa fa-user"></i> Student 06</li>
+                                <li><i class="fa fa-user"></i> Student 07</li>
+                            </ul>
+                        </div>
+
+                        <!-- Right Panel: Student Activity Notification -->
+                        <div class="quiz-activity">
+                            <h3>Students Activity Notification</h3>
+                            <div class="activity-msg">
+                                <div class="msg"><i class="fa fa-user"></i> Student 01</div>
+                                <div class="msg"><i class="fa fa-user"></i> Student 02</div>
+                                <div class="msg"><i class="fa fa-user"></i> Student 02</div>
+                                <div class="msg"><i class="fa fa-user"></i> Student 02</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Group Mode -->
+                    <div class="mode-section" id="group" style="display:none; flex-direction: row; gap: 20px;">
+
+                        <!-- Left Panel: Groups List -->
+                        <div class="groups-list">
+                            <h3>Groups</h3>
+                            <ul>
+                                <li><i class="fa fa-users"></i> Group A</li>
+                                <li><i class="fa fa-users"></i> Group B</li>
+                                <li><i class="fa fa-users"></i> Group C</li>
+                            </ul>
+                            <button class="create-group-btn"><i class="fa fa-plus"></i> Create New Group</button>
+                        </div>
+
+                        <!-- Right Panel: Group Details & Chat -->
+                        <div class="group-details">
+                            <h3>Group A - Discussion</h3>
+                            
+                            <!-- Members -->
+                            <div class="group-members">
+                                <h4>Members</h4>
+                                <ul>
+                                    <li><i class="fa fa-user"></i> Student 01</li>
+                                    <li><i class="fa fa-user"></i> Student 02</li>
+                                    <li><i class="fa fa-user"></i> Student 03</li>
+                                </ul>
+                            </div>
+
+                            <!-- Discussion Chat -->
+                            <div class="group-chat">
+                                <h4>Discussion</h4>
+                                <div class="chat-messages">
+                                    <div class="msg"><i class="fa fa-user"></i> Student 01: Let's start working on Task 1</div>
+                                    <div class="msg lecturer"><i class="fa fa-chalkboard-teacher"></i> Lecturer: Good idea!</div>
+                                </div>
+                                <div class="chat-input">
+                                    <input type="text" placeholder="Type a message..." />
+                                    <button><i class="fa fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Switch modes
+        const buttons = document.querySelectorAll(".mode-btn");
+        const sections = document.querySelectorAll(".mode-section");
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // reset buttons
+                buttons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                // hide all sections
+                sections.forEach(sec => sec.style.display = "none");
+
+                // show selected
+                const mode = btn.getAttribute("data-mode");
+                document.getElementById(mode).style.display = "flex";
+            });
+        });
+    </script>
+</body>
+</html>

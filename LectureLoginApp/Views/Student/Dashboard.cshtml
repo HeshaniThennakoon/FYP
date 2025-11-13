@@ -1,0 +1,75 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="~/css/student-dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">Students List & Status</h2>
+            <ul class="students-list">
+                <li><span class="status online"></span> Student 01</li>
+                <li><span class="status offline"></span> Student 02</li>
+                <li><span class="status online"></span> Student 03</li>
+                <li><span class="status online"></span> Student 04</li>
+                <li><span class="status offline"></span> Student 05</li>
+                <li><span class="status online"></span> Student 06</li>
+                <li><span class="status offline"></span> Student 07</li>
+                <li><span class="status online"></span> Student 08</li>
+                <li><span class="status offline"></span> Student 09</li>
+                <li><span class="status offline"></span> Student 10h</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Navigation -->
+            <div class="topbar">
+                <div class="icons">
+                    <i class="fa fa-bell"></i>
+                    <i class="fa fa-user-circle"></i>
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="content">
+
+                <!-- Video/Sharing Section -->
+                <div class="video-section">
+                    <div class="video-box"></div>
+                    <div class="controls">
+                        <i class="fa fa-camera"></i>
+                        <i class="fa fa-microphone"></i>
+                        <button class="btn-share">Start Sharing</button>
+                    </div>
+                </div>
+
+                <!-- Chat Section -->
+                <div class="chat-box">
+                    <h3>Chat with Teacher</h3>
+                    <div class="messages">
+                        <div class="msg teacher">Hello Student!</div>
+                        <div class="msg student">Hello Teacher!</div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Type a message..." />
+                        <button><i class="fa fa-paper-plane"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>
