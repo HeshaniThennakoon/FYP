@@ -24,8 +24,8 @@ E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\scop
 E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\scopedcss\projectbundle\LectureLoginApp.bundle.scp.css
 E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\z9wjo2hcru-{0}-1r5mgr0aty-1r5mgr0aty.gz
 E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\uf762jouuu-{0}-xqf15cypsi-xqf15cypsi.gz
-E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\nwj6amhxxi-{0}-vgwi3dissr-vgwi3dissr.gz
-E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\fe7nxc46we-{0}-gw732iod4g-gw732iod4g.gz
+E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\nwj6amhxxi-{0}-djotj2vc76-djotj2vc76.gz
+E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\fe7nxc46we-{0}-af039bx6t1-af039bx6t1.gz
 E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\2y96328khi-{0}-oq8r4nbcb2-oq8r4nbcb2.gz
 E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\xmd9h0b2jx-{0}-toeu3726ka-toeu3726ka.gz
 E:\5.Projects\Final Year Project\Frontend\lectureLoginApp\obj\Debug\net10.0\compressed\of19fjfm5d-{0}-61n19gt1b8-61n19gt1b8.gz

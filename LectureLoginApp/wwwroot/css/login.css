@@ -21,32 +21,32 @@ body {
 }
 
 .illustration {
-    flex: 1; /* take available space */
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #a68dfd; /* same purple background */
+    background: #a68dfd;
 }
 
 .illustration img {
     width: 100%;
-    height: 100vh;   /* make it fill full height */
-    object-fit: cover; /* ensures it scales properly */
+    height: 100vh;  
+    object-fit: cover;
 }
 
 
 .login-box {
-    flex: 0 0 400px;       /* fixed width */
-    display: flex;         /* center content */
+    flex: 0 0 400px;      
+    display: flex;        
     flex-direction: column;
-    justify-content: center;  /* vertical center */
-    align-items: center;      /* horizontal center */
+    justify-content: center;  
+    align-items: center;     
     padding: 40px;
     background: #fff;
-    height: 60vh;             /* slightly smaller height */
-    margin-right: 40px;       /* gap from right corner */
-    margin-left: 40px;        /* gap from left corner */
-    border-radius: 16px;      /* optional rounded corners */
+    height: 60vh;            
+    margin-right: 40px;       
+    margin-left: 40px;        
+    border-radius: 16px;     
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
@@ -84,7 +84,7 @@ body {
 .role-toggle {
     display: flex;
     justify-content: center;
-    gap: 20px;   /* <-- adds space between Student & Teacher */
+    gap: 20px;   
     margin-bottom: 20px;
 }
 
@@ -97,7 +97,7 @@ body {
 }
 
 .role-toggle input[type="radio"] {
-    display: none; /* hide default radio button */
+    display: none; 
 }
 
 .role-toggle input[type="radio"]:checked + label {

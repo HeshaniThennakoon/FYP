@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LectureLoginApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc9e5706bac59768ee790284d8084b19693a76fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0e492f675e180aada5e2c3bb5455275e91aa9f8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("LectureLoginApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LectureLoginApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
