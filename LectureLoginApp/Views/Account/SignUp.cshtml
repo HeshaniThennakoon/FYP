@@ -20,6 +20,147 @@
 
             <!-- Role Switch Buttons -->
             <div class="role-toggle" id="roleToggle">
+                <button type="button" class="role-btn active" data-role="student" id="btnStudent">
+                    <i class="fa fa-user-graduate"></i> Student
+                </button>
+                <button type="button" class="role-btn" data-role="teacher" id="btnTeacher">
+                    <i class="fa fa-chalkboard-teacher"></i> Lecturer
+                </button>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="SignUp" id="signupForm">
+                <input type="hidden" name="role" id="roleInput" value="student" />
+
+                <!-- STUDENT FORM -->
+                <div class="form-section" id="studentForm">
+                    <div class="form-left">
+                        <label for="student_name">Full Name</label>
+                        <input id="student_name" type="text" name="student_name" placeholder="Enter full name" required />
+
+                        <label for="regNo">Registration No</label>
+                        <input id="regNo" type="text" name="regNo" placeholder="EG/xx/yyyy" required />
+
+                        <label for="academicYear">Academic Year</label>
+                        <input id="academicYear" type="text" name="academicYear" placeholder="e.g., 2022/2023" required />
+
+                        <label for="batch">Batch</label>
+                        <input id="batch" type="text" name="batch" placeholder="e.g., 21" required />
+
+                        <label for="department">Department</label>
+                        <input id="department" type="text" name="department" placeholder="e.g., Software Engineering" required />
+
+                        <label for="student_email">Email Address</label>
+                        <input id="student_email" type="email" name="student_email" placeholder="Enter your email" required />
+
+                        <label for="student_phone">Phone No</label>
+                        <input id="student_phone" type="tel" name="student_phone" placeholder="07xxxxxxxx" required />
+                    </div>
+
+                    <div class="form-right">
+                        <div class="profile-pic">
+                            <img id="previewStudent" src="" alt="Profile Picture" />
+                            <span id="profileTextStudent">Profile</span>
+                        </div>
+                        <label class="upload-btn">
+                            Upload
+                            <input type="file" name="student_profilePic" accept="image/*" hidden onchange="previewImage(event,'Student')" />
+                        </label>
+                    </div>
+                    <button type="submit" class="signup-btn">Sign Up as Student</button>
+                </div>
+
+                <!-- TEACHER FORM -->
+                <div class="form-section" id="teacherForm" hidden>
+                    <div class="form-left">
+                        <label for="teacher_name">Full Name</label>
+                        <input id="teacher_name" type="text" name="teacher_name" placeholder="Enter full name" required />
+
+                        <label for="lecturerId">Lecturer ID</label>
+                        <input id="lecturerId" type="text" name="lecturerId" placeholder="e.g., L001" required />
+
+                        <label for="teacher_department">Department</label>
+                        <input id="teacher_department" type="text" name="teacher_department" placeholder="e.g., Computer Science" required />
+
+                        <label for="teacher_email">Email Address</label>
+                        <input id="teacher_email" type="email" name="teacher_email" placeholder="Enter your email" required />
+
+                        <label for="teacher_phone">Phone No</label>
+                        <input id="teacher_phone" type="tel" name="teacher_phone" placeholder="07xxxxxxxx" required />
+                    </div>
+
+                    <div class="form-right">
+                        <div class="profile-pic">
+                            <img id="previewTeacher" src="" alt="Profile Picture" />
+                            <span id="profileTextTeacher">Profile</span>
+                        </div>
+                        <label class="upload-btn">
+                            Upload
+                            <input type="file" name="teacher_profilePic" accept="image/*" hidden onchange="previewImage(event,'Teacher')" />
+                        </label>
+                    </div>
+                    <button type="submit" class="signup-btn">Sign Up as Lecturer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleButtons = document.querySelectorAll(".role-btn");
+            const studentForm = document.getElementById("studentForm");
+            const teacherForm = document.getElementById("teacherForm");
+            const roleInput = document.getElementById("roleInput");
+
+            function switchRole(selectedRole) {
+                roleInput.value = selectedRole;
+                roleButtons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-role') === selectedRole));
+                studentForm.hidden = selectedRole !== 'student';
+                teacherForm.hidden = selectedRole !== 'teacher';
+            }
+
+            roleButtons.forEach(btn => btn.addEventListener('click', () => switchRole(btn.dataset.role)));
+
+            window.previewImage = function (event, type) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const output = document.getElementById(`preview${type}`);
+                const text = document.getElementById(`profileText${type}`);
+                output.src = URL.createObjectURL(file);
+                output.style.display = 'block';
+                text.style.display = 'none';
+            };
+
+            switchRole(roleInput.value);
+        });
+    </script>
+</body>
+</html>
+
+
+@* 
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" href="~/css/signup.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-box">
+            <h2>Sign Up Portal</h2>
+
+            <!-- Role Switch Buttons -->
+            <div class="role-toggle" id="roleToggle">
                 <button type="button" class="role-btn active" data-role="student" id="btnStudent" aria-label="Sign up as student">
                     <i class="fa fa-user-graduate"></i> Student
                 </button>
@@ -150,3 +291,5 @@
     </script>
 </body>
 </html>
+
+ *@
