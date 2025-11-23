@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolLoginApp.Controllers
 {
-    public class LecturerController : Controller
+    public class TeacherController : Controller
     {
         public IActionResult Dashboard()
         {

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\5.Projects\\Final Year Project\\Frontend\\lectureLoginApp\\LectureLoginApp.csproj": {}
+    "E:\\5.Projects\\Final Year Project\\Frontend\\LectureLoginApp\\LectureLoginApp.csproj": {}
   },
   "projects": {
-    "E:\\5.Projects\\Final Year Project\\Frontend\\lectureLoginApp\\LectureLoginApp.csproj": {
+    "E:\\5.Projects\\Final Year Project\\Frontend\\LectureLoginApp\\LectureLoginApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\5.Projects\\Final Year Project\\Frontend\\lectureLoginApp\\LectureLoginApp.csproj",
+        "projectUniqueName": "E:\\5.Projects\\Final Year Project\\Frontend\\LectureLoginApp\\LectureLoginApp.csproj",
         "projectName": "LectureLoginApp",
-        "projectPath": "E:\\5.Projects\\Final Year Project\\Frontend\\lectureLoginApp\\LectureLoginApp.csproj",
+        "projectPath": "E:\\5.Projects\\Final Year Project\\Frontend\\LectureLoginApp\\LectureLoginApp.csproj",
         "packagesPath": "C:\\Users\\hesha\\.nuget\\packages\\",
-        "outputPath": "E:\\5.Projects\\Final Year Project\\Frontend\\lectureLoginApp\\obj\\",
+        "outputPath": "E:\\5.Projects\\Final Year Project\\Frontend\\LectureLoginApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\hesha\\AppData\\Roaming\\NuGet\\NuGet.Config"

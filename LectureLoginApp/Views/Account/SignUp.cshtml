@@ -28,7 +28,7 @@
                 <div class="form-section">
                     <div class="form-left">
                         <label for="student_name">Full Name</label>
-                        <input id="student_name" type="text" name="student_name" placeholder="Enter full name" required />
+                        <input id="student_name" type="text" name="name" placeholder="Enter full name" required />
 
                         <label for="regNo">Registration No</label>
                         <input id="regNo" type="text" name="regNo" placeholder="EG/xx/yyyy" required />
@@ -43,10 +43,13 @@
                         <input id="department" type="text" name="department" placeholder="e.g., Software Engineering" required />
 
                         <label for="student_email">Email Address</label>
-                        <input id="student_email" type="email" name="student_email" placeholder="Enter your email" required />
+                        <input id="student_email" type="email" name="email" placeholder="Enter your email" required />
 
                         <label for="student_phone">Phone No</label>
                         <input id="student_phone" type="tel" name="student_phone" placeholder="07xxxxxxxx" required />
+
+                        <label for="student_password">Password</label>
+                        <input id="student_password" type="password" name="password" placeholder="Enter password" required />
                     </div>
 
                     <div class="form-right">
@@ -70,7 +73,7 @@
                 <div class="form-section">
                     <div class="form-left">
                         <label for="teacher_name">Full Name</label>
-                        <input id="teacher_name" type="text" name="teacher_name" placeholder="Enter full name" required />
+                        <input id="teacher_name" type="text" name="name" placeholder="Enter full name" required />
 
                         <label for="teacherId">Teacher ID</label>
                         <input id="teacherId" type="text" name="teacherId" placeholder="e.g., L001" required />
@@ -79,10 +82,13 @@
                         <input id="teacher_department" type="text" name="teacher_department" placeholder="e.g., Computer Science" required />
 
                         <label for="teacher_email">Email Address</label>
-                        <input id="teacher_email" type="email" name="teacher_email" placeholder="Enter your email" required />
+                        <input id="teacher_email" type="email" name="email" placeholder="Enter your email" required />
 
                         <label for="teacher_phone">Phone No</label>
                         <input id="teacher_phone" type="tel" name="teacher_phone" placeholder="07xxxxxxxx" required />
+
+                        <label for="teacher_password">Password</label>
+                        <input id="teacher_password" type="password" name="password" placeholder="Enter password" required />
                     </div>
 
                     <div class="form-right">
@@ -102,39 +108,90 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const roleButtons = document.querySelectorAll(".role-btn");
-            const studentForm = document.getElementById("studentForm");
-            const teacherForm = document.getElementById("teacherForm");
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const roleButtons = document.querySelectorAll(".role-btn");
+    const studentForm = document.getElementById("studentForm");
+    const teacherForm = document.getElementById("teacherForm");
 
-            function switchRole(selectedRole) {
-                roleButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.role === selectedRole));
+    // Function to submit form data to backend
+    async function submitForm(form, role) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-                if (selectedRole === 'student') {
-                    studentForm.style.display = 'block';
-                    teacherForm.style.display = 'none';
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            // Map student/teacher fields to backend expected fields
+            if (data.student_name) data.name = data.student_name;
+            if (data.student_email) data.email = data.student_email;
+            if (data.student_password) data.password = data.student_password;
+
+            if (data.teacher_name) data.name = data.teacher_name;
+            if (data.teacher_email) data.email = data.teacher_email;
+            if (data.teacher_password) data.password = data.teacher_password;
+
+            // Include role
+            data.role = data.role || form.querySelector('input[name="role"]').value;
+
+            try {
+                const res = await fetch("http://localhost:3000/api/user/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+                if (res.ok) {
+                    alert(`${role} registered successfully!`);
+                    form.reset();
+
+                    //Redirect to login page
+                    window.location.href = '/Auth/Login';
+                    
                 } else {
-                    studentForm.style.display = 'none';
-                    teacherForm.style.display = 'block';
+                    alert(result.error || "Registration failed");
                 }
+            } catch (err) {
+                alert(err.message);
             }
-
-            roleButtons.forEach(btn => btn.addEventListener('click', () => switchRole(btn.dataset.role)));
-
-            window.previewImage = function(event, type) {
-                const file = event.target.files[0];
-                if (!file) return;
-                const output = document.getElementById(`preview${type}`);
-                const text = document.getElementById(`profileText${type}`);
-                output.src = URL.createObjectURL(file);
-                output.style.display = 'block';
-                text.style.display = 'none';
-            };
-
-            // Default: show student form
-            switchRole('student');
         });
-    </script>
+    }
+
+    // Attach submit handlers
+    submitForm(studentForm, "Student");
+    submitForm(teacherForm, "Teacher");
+
+    // Function to switch between student and teacher forms
+    function switchRole(selectedRole) {
+        roleButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.role === selectedRole));
+        if (selectedRole === 'student') {
+            studentForm.style.display = 'block';
+            teacherForm.style.display = 'none';
+        } else {
+            studentForm.style.display = 'none';
+            teacherForm.style.display = 'block';
+        }
+    }
+
+    // Attach role toggle buttons
+    roleButtons.forEach(btn => btn.addEventListener('click', () => switchRole(btn.dataset.role)));
+
+    // Image preview for profile picture
+    window.previewImage = function(event, type) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const output = document.getElementById(`preview${type}`);
+        const text = document.getElementById(`profileText${type}`);
+        output.src = URL.createObjectURL(file);
+        output.style.display = 'block';
+        text.style.display = 'none';
+    };
+
+    // Default: show student form
+    switchRole('student');
+});
+</script>
+
 </body>
 </html>

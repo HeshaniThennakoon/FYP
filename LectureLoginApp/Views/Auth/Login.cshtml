@@ -9,6 +9,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="~/css/login.css" />
 </head>
+
 <body>
     <div class="container">
         <div class="illustration">
@@ -23,17 +24,19 @@
                 <label for="teacher">Teacher</label>
             </div>
 
-            <form asp-action="Login" method="post">
+            <form id="LoginForm" method="post">
                 <h2>LOG IN</h2>
 
-                <input type="text" name="email" placeholder="youremail@mail.com" required />
-                <input type="password" name="password" placeholder="********" required />
+                <input type="text" id="email" name="email" placeholder="youremail@mail.com" required />
+                <input type="password" id="password" name="password" placeholder="********" required />
 
                 <div class="forgot-password">
                     <a asp-action="ForgotPassword" asp-controller="Auth">Forgot your password?</a>
                 </div>
 
                 <button type="submit">Log in</button>
+
+                <p id="error" class="error" style="color:red; margin-top:10px;"></p>
 
                 @if(ViewBag.Error != null)
                 {
@@ -44,4 +47,54 @@
         </div>
     </div>
 </body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.getElementById("LoginForm");
+    const errorMsg = document.getElementById("error");
+
+    loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Clear previous error
+        errorMsg.textContent = "";
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const role = document.querySelector('input[name="role"]:checked').value;
+
+        try {
+            const response = await fetch("http://localhost:3000/api/user/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password, role: role.toLowerCase() })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                errorMsg.textContent = data.error || "Login failed. Check your credentials.";
+                return;
+            }
+
+            // Save token
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
+
+            // Redirect based on role
+            if (data.role === "teacher") {
+                window.location.href = "/Teacher/Dashboard";
+            } else {
+                window.location.href = "/Student/Dashboard";
+            }
+
+        } catch (err) {
+            errorMsg.textContent = "Server error. Please try again later.";
+        }
+    });
+});
+</script>
+
+
+
 </html>
