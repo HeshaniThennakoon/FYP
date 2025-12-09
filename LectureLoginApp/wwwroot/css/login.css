@@ -130,3 +130,26 @@ body {
     text-decoration: underline;
     color: #6b21a8;
 }
+
+.signup-link {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.signup-link p {
+    font-size: 16px;
+    color: black;
+}
+
+.signup-link a {
+    font-size: 16px;
+    color: #6b21a8;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+    color: #6b21a8;
+}
