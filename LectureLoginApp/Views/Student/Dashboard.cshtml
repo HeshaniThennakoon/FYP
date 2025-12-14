@@ -50,7 +50,116 @@
                     <div class="controls">
                         <i class="fa fa-camera"></i>
                         <i class="fa fa-microphone"></i>
-                        <button class="btn-share">Start Sharing</button>
+                        <button class="btn-share" id="startSharingBtn">
+                            <i class="fas fa-share-square"></i> Start Sharing
+                        </button>
+
+                        <button class="btn-share stop" id="stopSharingBtn" disabled>
+                            <i class="fas fa-stop-circle"></i> Stop Sharing
+                        </button>
+
+                        <script>
+                            const startBtn = document.getElementById('startSharingBtn');
+                            const stopBtn = document.getElementById('stopSharingBtn');
+
+                            // ---------------------------
+                            // START SHARING
+                            // ---------------------------
+                            startBtn.addEventListener('click', async function () {
+                                const token = localStorage.getItem('token') || localStorage.getItem('jwt') || localStorage.getItem('access_token');
+
+                                if (!token) {
+                                    alert('You are not logged in! JWT token not found.');
+                                    return;
+                                }
+
+                                try {
+                                    const payload = JSON.parse(atob(token.split('.')[1]));
+                                    const studentName = payload.username;
+
+                                    console.log('Starting sharing for:', studentName);
+
+                                    const response = await fetch('http://localhost:3000/api/model/start', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${token}`
+                                        },
+                                        body: JSON.stringify({ student_name: studentName })
+                                    });
+
+                                    if (response.ok) {
+                                        const data = await response.json();
+                                        alert('Screen sharing started successfully!');
+                                        console.log('Success:', data);
+
+                                        // Update buttons
+                                        startBtn.disabled = true;
+                                        startBtn.innerHTML = '<i class="fas fa-check"></i> Sharing...';
+
+                                        stopBtn.disabled = false;
+
+                                    } else {
+                                        const errorText = await response.text();
+                                        alert('Failed to start sharing: ' + response.status + ' ' + errorText);
+                                    }
+
+                                } catch (err) {
+                                    console.error('Error:', err);
+                                    alert('Error: ' + err.message);
+                                }
+                            });
+
+                            // ---------------------------
+                            // STOP SHARING
+                            // ---------------------------
+                            stopBtn.addEventListener('click', async function () {
+                                const token = localStorage.getItem('token') || localStorage.getItem('jwt') || localStorage.getItem('access_token');
+
+                                if (!token) {
+                                    alert('You are not logged in! JWT token not found.');
+                                    return;
+                                }
+
+                                try {
+                                    const payload = JSON.parse(atob(token.split('.')[1]));
+                                    const studentName = payload.username;
+
+                                    console.log('Stopping sharing for:', studentName);
+
+                                    const response = await fetch('http://localhost:3000/api/model/stop', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${token}`
+                                        },
+                                        body: JSON.stringify({ student_name: studentName })
+                                    });
+
+                                    if (response.ok) {
+                                        const data = await response.json();
+                                        alert('Screen sharing stopped successfully!');
+                                        console.log('Success:', data);
+
+                                        // Update buttons
+                                        stopBtn.disabled = true;
+                                        stopBtn.innerHTML = '<i class="fas fa-stop-circle"></i> Stopped';
+
+                                        startBtn.disabled = false;
+                                        startBtn.innerHTML = '<i class="fas fa-share-square"></i> Start Sharing';
+
+                                    } else {
+                                        const errorText = await response.text();
+                                        alert('Failed to stop sharing: ' + response.status + ' ' + errorText);
+                                    }
+
+                                } catch (err) {
+                                    console.error('Error:', err);
+                                    alert('Error: ' + err.message);
+                                }
+                            });
+                        </script>
+
                     </div>
                 </div>
 

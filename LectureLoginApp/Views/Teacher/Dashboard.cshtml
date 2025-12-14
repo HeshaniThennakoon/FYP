@@ -1,4 +1,4 @@
-@{
+﻿@{
     Layout = null;
 }
 
@@ -8,7 +8,136 @@
     <meta charset="utf-8" />
     <title>Teacher Dashboard</title>
     <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/alerts.css" />
+    <link rel="stylesheet" href="~/css/quiz.css" />
+    <link rel="stylesheet" href="~/css/report.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <style>
+        /* Quick inline styles for the new quiz UI to ensure layout matches dashboard */
+        .quiz-main-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .quiz-controls-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        .question-section textarea.text-input {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .option-row {
+            margin-top: 8px;
+        }
+
+        .answers-list {
+            max-height: 220px;
+            overflow: auto;
+            padding: 10px;
+            border: 1px solid #f0f0f0;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+
+        .answer-item {
+            padding: 6px 8px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            background: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .sent-questions {
+            margin-top: 20px;
+        }
+
+        .sent-question {
+            padding: 12px;
+            border: 1px solid #f0f0f0;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        .meta {
+            color: #666;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .status-active {
+            background: #e8f5ff;
+            color: #1976d2;
+        }
+
+        .status-ended {
+            background: #fff3e0;
+            color: #d84315;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .small-btn {
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -17,11 +146,11 @@
         <aside class="sidebar">
             <h2 class="logo">Dashboard</h2>
             <ul class="menu">
-                <li><a href="#">Students List & Status</a></li>
-                <li><a href="#">Alerts & Notifications</a></li>
-                <li><a href="#">Quiz Management</a></li>
-                <li><a href="#">Report & Analytics</a></li>
-                <li><a href="#">Settings</a></li>
+                <li><a href="#" class="nav-link" data-page="lecture-view">Students List & Status</a></li>
+                <li><a href="#" class="nav-link" data-page="alerts">Alerts & Notifications</a></li>
+                <li><a href="#" class="nav-link" data-page="quiz">Quiz Management</a></li>
+                <li><a href="#" class="nav-link" data-page="report">Report & Analytics</a></li>
+                <li><a href="#" class="nav-link" data-page="settings">Settings</a></li>
             </ul>
         </aside>
 
@@ -44,13 +173,207 @@
             <!-- Content Section -->
             <div class="content">
 
+                <!-- Alerts & Notifications Page -->
+                <div class="page-section" id="alerts-page" style="display:none; width: 100%;">
+                    <div class="alerts-container">
+                        <h2>Alerts & Notifications</h2>
+
+                        <!-- Filter Buttons -->
+                        <div class="alert-filters">
+                            <button class="filter-btn active" data-filter="all">All Alerts</button>
+                            <button class="filter-btn" data-filter="drowsiness_alert">Drowsiness Alerts</button>
+                            <button class="filter-btn" data-filter="behavioral_alert">Behavioral Alerts</button>
+                        </div>
+
+                        <!-- Mark All as Read Button -->
+                        <div class="alert-actions">
+                            <button id="markAllReadBtn" class="mark-all-read-btn">
+                                <i class="fa fa-check-double"></i> Mark All as Read
+                            </button>
+                        </div>
+
+                        <!-- Alerts List -->
+                        <div class="alerts-list" id="alertsList">
+                            <!-- Alerts will be populated here by JavaScript -->
+                            <div class="no-alerts">Loading alerts...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Management Page (NEW - Simple Real-Time UI) -->
+                <div class="page-section" id="quiz-page" style="display:none; width: 100%;">
+                    <div class="quiz-container">
+                        <div class="page-header">
+                            <h2>Quiz Management</h2>
+                        </div>
+
+                        <div class="quiz-main-container">
+
+                            <!-- Top controls: start / end -->
+                            <div class="quiz-controls-row">
+                                <button id="startQuizBtn" class="btn-primary"><i class="fa fa-play"></i> Start Quiz</button>
+                                <button id="endQuizBtn" class="btn-danger" disabled><i class="fa fa-stop"></i> End Quiz</button>
+
+                                <div style="margin-left:auto; display:flex; gap:10px; align-items:center;">
+                                    <div><strong>Session Code:</strong> <span id="quizSessionCode">-</span></div>
+                                    <button id="refreshParticipants" class="small-btn" title="Refresh participant list"><i class="fa fa-sync"></i></button>
+                                </div>
+                            </div>
+
+                            <hr style="margin:18px 0;">
+
+                            <!-- Question input -->
+                            <div class="question-section">
+                                <h3>Write Question</h3>
+                                <textarea id="questionInput" class="text-input" placeholder="Type the question that will be sent to students..."></textarea>
+                                <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+                                    <button id="sendQuestionBtn" class="btn-secondary">Send Question</button>
+                                    <button id="previewQuestionBtn" class="small-btn">Preview</button>
+                                    <div id="questionSendMsg" style="color:#1976d2; font-weight:600;"></div>
+                                </div>
+                            </div>
+
+                            <hr style="margin:18px 0;">
+
+                            <!-- Options -->
+                            <div class="options-section">
+                                <h3>Options</h3>
+
+                                <div class="option-row">
+                                    <input type="text" id="optionA" class="text-input" placeholder="Option A" />
+                                </div>
+                                <div class="option-row">
+                                    <input type="text" id="optionB" class="text-input" placeholder="Option B" />
+                                </div>
+                                <div class="option-row">
+                                    <input type="text" id="optionC" class="text-input" placeholder="Option C" />
+                                </div>
+                                <div class="option-row">
+                                    <input type="text" id="optionD" class="text-input" placeholder="Option D" />
+                                </div>
+
+                                <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
+                                    <label for="correctAnswer">Correct Answer:</label>
+                                    <select id="correctAnswer" class="text-input" style="width:110px;">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                    </select>
+
+                                    <button id="sendOptionsBtn" class="btn-secondary">Send Options</button>
+                                </div>
+                            </div>
+
+                            <hr style="margin:18px 0;">
+
+                            <!-- Live student answers panel -->
+                            <div class="answers-section">
+                                <h3>Live Student Answers</h3>
+                                <div id="answersList" class="answers-list">
+                                    <p class="empty-msg">Waiting for answers...</p>
+                                </div>
+                            </div>
+
+                            <!-- Sent Questions history -->
+                            <div class="sent-questions">
+                                <h3>Sent Questions History</h3>
+                                <div id="sentQuestionsList">
+                                    <p style="color:#777;">No questions sent yet.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report & Analytics Page -->
+                <div class="page-section" id="report-page" style="display:none; width: 100%;">
+                    <div class="report-container">
+                        <div class="page-header">
+                            <h2>Reports</h2>
+                            <div style="margin-top:10px;">
+                                <input type="text" id="searchStudent" placeholder="Search student..." class="text-input" />
+                            </div>
+                        </div>
+
+                        <div class="report-section" style="margin-top:15px;">
+                            <table id="reportTable" class="data-table" style="width:100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background:#f0f0f0;">
+                                        <th>Student Name</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Duration (sec)</th>
+                                        <th>Drowsiness Alerts</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportTableBody">
+                                    <tr><td colspan="5" style="text-align:center; padding:20px;">Loading reports...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Example: fetch all reports (replace with your backend API)
+                        let allReports = [];
+
+                        async function loadReportsPage() {
+                            try {
+                                const token = localStorage.getItem("token");
+                                const res = await fetch('http://localhost:3000/api/report', {
+                                    headers: { 'Authorization': `Bearer ${token}` }
+                                });
+                                const data = await res.json();
+                                allReports = Array.isArray(data) ? data : (data.data || []);
+                                renderReportTable(allReports);
+                            } catch (err) {
+                                console.error(err);
+                                document.getElementById('reportTableBody').innerHTML =
+                                    '<tr><td colspan="5" style="text-align:center; color:red;">Failed to load reports</td></tr>';
+                            }
+                        }
+
+                        function renderReportTable(reports) {
+                            const tbody = document.getElementById('reportTableBody');
+                            if (!reports.length) {
+                                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No reports found</td></tr>';
+                                return;
+                            }
+                            tbody.innerHTML = reports.map(r => `
+                                <tr>
+                                    <td>${r.student_name}</td>
+                                    <td>${new Date(r.start_time).toLocaleString()}</td>
+                                    <td>${new Date(r.end_time).toLocaleString()}</td>
+                                    <td>${r.session_duration_sec.toFixed(2)}</td>
+                                    <td>${r.drowsiness_alerts}</td>
+                                </tr>
+                            `).join('');
+                        }
+
+                        // Search functionality
+                        const searchInput = document.getElementById('searchStudent');
+                        searchInput.addEventListener('input', () => {
+                            const keyword = searchInput.value.trim().toLowerCase();
+                            const filtered = allReports.filter(r => r.student_name.toLowerCase().includes(keyword));
+                            renderReportTable(filtered);
+                        });
+
+                        // Initialize on page load
+                        loadReportsPage();
+                    </script>
+                </div>
+
+
                 <!-- Left Section (Students List / Quiz / Group) -->
-                <div class="left-content">
+                <div class="left-content" id="lecture-view" style="display:flex;">
                     <!-- Lecture Mode -->
                     <div class="mode-section" id="lecture" style="display:block;">
                         <div class="students-list">
                             <h3>Students Started List</h3>
-                            <ul>
+                            <ul id="studentsListSimple">
                                 <li><i class="fa fa-user"></i> Student 01</li>
                                 <li><i class="fa fa-user"></i> Student 02</li>
                                 <li><i class="fa fa-user"></i> Student 03</li>
@@ -70,13 +393,13 @@
                         </div>
                     </div>
 
-                    <!-- Quiz Mode -->
+                    <!-- Quiz Mode (left-right display for live interactions) -->
                     <div class="mode-section" id="quiz" style="display:none; flex-direction: row; gap: 20px;">
-                        
+
                         <!-- Left Panel: Students who attended -->
                         <div class="quiz-students">
                             <h3>Student Who Attend to the Quiz</h3>
-                            <ul>
+                            <ul id="quizParticipantsList">
                                 <li><i class="fa fa-user"></i> Student 01</li>
                                 <li><i class="fa fa-user"></i> Student 02</li>
                                 <li><i class="fa fa-user"></i> Student 03</li>
@@ -90,24 +413,20 @@
                         <!-- Right Panel: Student Activity Notification -->
                         <div class="quiz-activity">
                             <h3>Students Activity Notification</h3>
-                            <div class="activity-msg">
+                            <div class="activity-msg" id="activityMsgs">
                                 <div class="msg"><i class="fa fa-user"></i> Student 01</div>
-                                <div class="msg"><i class="fa fa-user"></i> Student 02</div>
                                 <div class="msg"><i class="fa fa-user"></i> Student 02</div>
                                 <div class="msg"><i class="fa fa-user"></i> Student 02</div>
                             </div>
                         </div>
-
                     </div>
-
 
                     <!-- Group Mode -->
                     <div class="mode-section" id="group" style="display:none; flex-direction: row; gap: 20px;">
-
                         <!-- Left Panel: Groups List -->
                         <div class="groups-list">
                             <h3>Groups</h3>
-                            <ul>
+                            <ul id="groupsList">
                                 <li><i class="fa fa-users"></i> Group A</li>
                                 <li><i class="fa fa-users"></i> Group B</li>
                                 <li><i class="fa fa-users"></i> Group C</li>
@@ -118,7 +437,7 @@
                         <!-- Right Panel: Group Details & Chat -->
                         <div class="group-details">
                             <h3>Group A - Discussion</h3>
-                            
+
                             <!-- Members -->
                             <div class="group-members">
                                 <h4>Members</h4>
@@ -152,24 +471,532 @@
     </div>
 
     <script>
-        // Switch modes
+        /* ------------------------------
+           Global variables & helpers
+           ------------------------------ */
+        let allAlerts = [];
+        let currentFilter = 'all';
+
+        // Page nav
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pagesSections = document.querySelectorAll('.page-section, .left-content');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+
+                // Hide all sections
+                pagesSections.forEach(section => section.style.display = 'none');
+
+                // Show selected page
+                if (page === 'lecture-view') {
+                    document.getElementById('lecture-view').style.display = 'flex';
+                } else if (page === 'alerts') {
+                    document.getElementById('alerts-page').style.display = 'block';
+                    fetchAlerts();
+                } else if (page === 'quiz') {
+                    document.getElementById('quiz-page').style.display = 'block';
+                    // no sample data; quiz page will show live UI
+                } else if (page === 'report') {
+                    document.getElementById('report-page').style.display = 'block';
+                    loadReports();
+                }
+            });
+        });
+
+        /* ------------------------------
+           Alerts logic (unchanged)
+           ------------------------------ */
+        async function fetchAlerts() {
+            const alertsList = document.getElementById('alertsList');
+            alertsList.innerHTML = '<div class="no-alerts">Loading alerts...</div>';
+
+            try {
+                const token = localStorage.getItem("token");
+                const response = await fetch('http://localhost:3000/api/alert/unread', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch alerts');
+                }
+
+                const data = await response.json();
+                allAlerts = Array.isArray(data) ? data : (data.data || data.alerts || []);
+
+                if (allAlerts.length === 0) {
+                    alertsList.innerHTML = '<div class="no-alerts">No unread alerts</div>';
+                    return;
+                }
+
+                loadAlerts(currentFilter);
+            } catch (error) {
+                console.error('Error fetching alerts:', error);
+                alertsList.innerHTML = '<div class="no-alerts">Failed to load alerts. Make sure backend API is running on port 3000.</div>';
+            }
+        }
+
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                loadAlerts(currentFilter);
+            });
+        });
+
+        function loadAlerts(filter) {
+            const alertsList = document.getElementById('alertsList');
+            let filteredAlerts = allAlerts;
+            if (filter !== 'all') filteredAlerts = allAlerts.filter(alert => alert.event_type === filter);
+            filteredAlerts = filteredAlerts.filter(alert => alert.status === 'unread');
+
+            if (filteredAlerts.length === 0) {
+                alertsList.innerHTML = '<div class="no-alerts">No alerts to display</div>';
+                return;
+            }
+
+            alertsList.innerHTML = filteredAlerts.map(alert => `
+                <div class="alert-item" data-id="${alert._id}">
+                    <div class="alert-header">
+                        <div class="alert-info">
+                            <h4>${alert.student_name}</h4>
+                            <span class="alert-type ${alert.event_type}">
+                                ${alert.event_type === 'drowsiness_alert' ? '😴 Drowsiness Alert' : '⚠️ Behavioral Alert'}
+                            </span>
+                        </div>
+                        <span class="alert-time">${formatTime(alert.timestamp)}</span>
+                    </div>
+                    <div class="alert-actions">
+                        <button class="read-alert-btn" onclick="markAlertAsRead('${alert._id}')">
+                            <i class="fa fa-check"></i> Mark as Read
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function markAlertAsRead(alertId) {
+            allAlerts = allAlerts.map(alert => alert._id === alertId ? { ...alert, status: 'read' } : alert);
+            loadAlerts(currentFilter);
+        }
+
+        document.getElementById('markAllReadBtn').addEventListener('click', async () => {
+            if (allAlerts.length === 0) {
+                alert('No alerts to mark as read!');
+                return;
+            }
+            try {
+                allAlerts = allAlerts.map(alert => ({ ...alert, status: 'read' }));
+                loadAlerts(currentFilter);
+                alert('All alerts have been marked as read!');
+                const token = localStorage.getItem("token");
+                await fetch('http://localhost:3000/api/alert/mark-all-read', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } catch (error) {
+                console.error('Error marking alerts as read:', error);
+            }
+        });
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+
+            return date.toLocaleDateString();
+        }
+
+        /* ------------------------------
+           Mode switching (lecture/quiz/group)
+           ------------------------------ */
         const buttons = document.querySelectorAll(".mode-btn");
         const sections = document.querySelectorAll(".mode-section");
 
         buttons.forEach(btn => {
             btn.addEventListener("click", () => {
-                // reset buttons
                 buttons.forEach(b => b.classList.remove("active"));
                 btn.classList.add("active");
-
-                // hide all sections
                 sections.forEach(sec => sec.style.display = "none");
-
-                // show selected
                 const mode = btn.getAttribute("data-mode");
                 document.getElementById(mode).style.display = "flex";
             });
         });
+
+         
+
+        /* ------------------------------
+           NEW QUIZ MANAGEMENT LOGIC
+           ------------------------------ */
+
+        // Replace this URL with your actual backend socket origin if needed
+        const SOCKET_ORIGIN = window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin;
+        const socket = io(SOCKET_ORIGIN);
+
+        // DOM elements for quiz
+        const startQuizBtn = document.getElementById('startQuizBtn');
+        const endQuizBtn = document.getElementById('endQuizBtn');
+        const questionInput = document.getElementById('questionInput');
+        const sendQuestionBtn = document.getElementById('sendQuestionBtn');
+        const previewQuestionBtn = document.getElementById('previewQuestionBtn');
+
+        const optionA = document.getElementById('optionA');
+        const optionB = document.getElementById('optionB');
+        const optionC = document.getElementById('optionC');
+        const optionD = document.getElementById('optionD');
+        const correctAnswer = document.getElementById('correctAnswer');
+        const sendOptionsBtn = document.getElementById('sendOptionsBtn');
+
+        const answersList = document.getElementById('answersList');
+        const sentQuestionsList = document.getElementById('sentQuestionsList');
+        const quizSessionCodeSpan = document.getElementById('quizSessionCode');
+        const refreshParticipantsBtn = document.getElementById('refreshParticipants');
+
+        // Local state
+        let currentSessionCode = null;
+        let sentQuestions = []; // { id, q, options, correct, sentAt, status, answers:[] }
+
+        // Utility to append message to answers list
+        function addAnswerToList(student, answer, timestamp) {
+            // remove "waiting" message if present
+            const waiting = answersList.querySelector('.empty-msg');
+            if (waiting) waiting.remove();
+
+            const el = document.createElement('div');
+            el.className = 'answer-item';
+            const timeStr = timestamp ? ` <span class="meta">${new Date(timestamp).toLocaleTimeString()}</span>` : '';
+            el.innerHTML = `<strong>${escapeHtml(student)}</strong>: ${escapeHtml(answer)} ${timeStr}`;
+            answersList.prepend(el);
+        }
+
+        // Escape helper
+        function escapeHtml(s) {
+            if (!s && s !== 0) return '';
+            return String(s).replace(/[&<>"'`=\/]/g, function (c) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;',
+                    '/': '&#x2F;',
+                    '`': '&#x60;',
+                    '=': '&#x3D;'
+                }[c];
+            });
+        }
+
+        // Start quiz (create session on server)
+        startQuizBtn.addEventListener('click', async () => {
+            try {
+                // request a new session (if your backend supports it)
+                const res = await fetch('/api/session/startSession', { method: 'POST' });
+                const data = res.ok ? await res.json() : null;
+                currentSessionCode = data && data.code ? data.code : (Math.random().toString(36).slice(2,8).toUpperCase());
+                quizSessionCodeSpan.textContent = currentSessionCode;
+
+                // Inform server via socket (presenter joining)
+                socket.emit('presenter-join', currentSessionCode);
+
+                startQuizBtn.disabled = true;
+                endQuizBtn.disabled = false;
+                sendQuestionBtn.disabled = false;
+                sendOptionsBtn.disabled = false;
+
+                // emoji or status
+                addActivityMessage('System', 'Quiz session started: ' + currentSessionCode);
+
+            } catch (err) {
+                console.error('Failed to start session', err);
+                alert('Failed to start session. Check backend.');
+            }
+        });
+
+        // End quiz (end session)
+        endQuizBtn.addEventListener('click', async () => {
+            if (!currentSessionCode) return alert('No active session');
+            try {
+                await fetch('/api/session/endSession/' + currentSessionCode, { method: 'POST' });
+            } catch (e) {
+                // ignore - still emit socket end
+                console.warn('end session API call failed', e);
+            }
+            socket.emit('end-quiz', currentSessionCode);
+
+            startQuizBtn.disabled = false;
+            endQuizBtn.disabled = true;
+            sendQuestionBtn.disabled = true;
+            sendOptionsBtn.disabled = true;
+
+            quizSessionCodeSpan.textContent = '-';
+            addActivityMessage('System', 'Quiz session ended');
+
+            // mark current active question as ended if any
+            if (sentQuestions.length > 0) {
+                const last = sentQuestions[sentQuestions.length - 1];
+                if (last && last.status === 'sent') {
+                    last.status = 'ended';
+                    renderSentQuestions();
+                }
+            }
+            currentSessionCode = null;
+            answersList.innerHTML = '<p class="empty-msg">Quiz ended.</p>';
+        });
+
+        // Send question (teacher sends question text to students)
+        sendQuestionBtn.addEventListener('click', () => {
+            if (!currentSessionCode) return alert('Start a quiz session first');
+            const q = questionInput.value.trim();
+            if (!q) return alert('Please type a question');
+
+            // prepare a question object
+            const qobj = {
+                id: 'q_' + Date.now(),
+                q: q,
+                options: null,
+                correct: null,
+                sentAt: new Date().toISOString(),
+                status: 'sent',
+                answers: []
+            };
+
+            // push to history
+            sentQuestions.push(qobj);
+            renderSentQuestions();
+
+            // clear answers area to start collecting for this question
+            answersList.innerHTML = '<p class="empty-msg">Waiting for answers...</p>';
+
+            // emit over socket
+            socket.emit('send-question', { code: currentSessionCode, question: { id: qobj.id, q: q } });
+
+            // UI feedback
+            document.getElementById('questionSendMsg').textContent = 'Question sent';
+            setTimeout(()=> document.getElementById('questionSendMsg').textContent = '', 1800);
+        });
+
+        // Preview question on the teacher UI
+        previewQuestionBtn.addEventListener('click', () => {
+            const q = questionInput.value.trim();
+            if (!q) return alert('Enter question to preview');
+            alert('Preview:\n\n' + q);
+        });
+
+        // Send options + correct answer (teacher defines options for the active question)
+        sendOptionsBtn.addEventListener('click', () => {
+            if (!currentSessionCode) return alert('Start a quiz session first');
+            if (sentQuestions.length === 0) return alert('Send the question first, then send options');
+
+            const lastQ = sentQuestions[sentQuestions.length - 1];
+            if (!lastQ || lastQ.status !== 'sent') return alert('No active question to attach options to');
+
+            const opts = {
+                A: optionA.value.trim(),
+                B: optionB.value.trim(),
+                C: optionC.value.trim(),
+                D: optionD.value.trim()
+            };
+            if (!opts.A || !opts.B || !opts.C || !opts.D) return alert('Fill all 4 options');
+
+            const correct = correctAnswer.value;
+            if (!['A','B','C','D'].includes(correct)) return alert('Select correct answer');
+
+            // attach to last question
+            lastQ.options = opts;
+            lastQ.correct = correct;
+            lastQ.optionsSentAt = new Date().toISOString();
+
+            // emit options over socket
+            socket.emit('send-options', {
+                code: currentSessionCode,
+                questionId: lastQ.id,
+                options: opts,
+                correct: correct
+            });
+
+            // update UI
+            renderSentQuestions();
+            addActivityMessage('System', `Options sent for question (${lastQ.id})`);
+        });
+
+        // Helper: render sent questions history
+        function renderSentQuestions() {
+            if (!sentQuestionsList) return;
+            if (sentQuestions.length === 0) {
+                sentQuestionsList.innerHTML = '<p style="color:#777;">No questions sent yet.</p>';
+                return;
+            }
+            sentQuestionsList.innerHTML = sentQuestions.slice().reverse().map(q => {
+                const optionsHtml = q.options ? `
+                    <div style="margin-top:8px;">
+                        <strong>A:</strong> ${escapeHtml(q.options.A)} &nbsp;&nbsp;
+                        <strong>B:</strong> ${escapeHtml(q.options.B)} &nbsp;&nbsp;
+                        <strong>C:</strong> ${escapeHtml(q.options.C)} &nbsp;&nbsp;
+                        <strong>D:</strong> ${escapeHtml(q.options.D)}
+                    </div>` : '<div style="margin-top:8px;color:#999;">Options not sent yet</div>';
+
+                const correctHtml = q.correct ? `<div class="meta">Correct: <strong>${escapeHtml(q.correct)}</strong></div>` : '';
+                const answersCount = q.answers ? q.answers.length : 0;
+                const statusClass = q.status === 'sent' ? 'status-active' : 'status-ended';
+
+                return `<div class="sent-question">
+                            <div><strong>Q:</strong> ${escapeHtml(q.q)}</div>
+                            ${optionsHtml}
+                            ${correctHtml}
+                            <div class="meta">Sent at: ${new Date(q.sentAt).toLocaleString()} · Answers: ${answersCount}</div>
+                            <div style="margin-top:8px;">
+                                <span class="status-badge ${statusClass}">${escapeHtml(q.status)}</span>
+                                <button class="small-btn" onclick="reopenQuestion('${q.id}')">Reopen</button>
+                                <button class="small-btn" onclick="closeQuestion('${q.id}')">Close</button>
+                                <button class="small-btn" onclick="exportQuestionResults('${q.id}')">Export</button>
+                            </div>
+                        </div>`;
+            }).join('');
+        }
+
+        // exported functions used in generated HTML (must be on global)
+        window.reopenQuestion = function(qid) {
+            const q = sentQuestions.find(x => x.id === qid);
+            if (!q) return alert('Question not found');
+            if (!currentSessionCode) return alert('Start a session first');
+            q.status = 'sent';
+            renderSentQuestions();
+            // notify students that question is reopened (optional)
+            socket.emit('reopen-question', { code: currentSessionCode, questionId: qid });
+        };
+
+        window.closeQuestion = function(qid) {
+            const q = sentQuestions.find(x => x.id === qid);
+            if (!q) return alert('Question not found');
+            q.status = 'ended';
+            renderSentQuestions();
+            socket.emit('close-question', { code: currentSessionCode, questionId: qid });
+        };
+
+        window.exportQuestionResults = function(qid) {
+            const q = sentQuestions.find(x => x.id === qid);
+            if (!q) return alert('Question not found');
+            // basic CSV export
+            const rows = [['Student','Answer','Timestamp']];
+            (q.answers || []).forEach(a => rows.push([a.student, a.answer, a.ts]));
+            const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `question_${qid}_results.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // Activity messages into the activity pane
+        function addActivityMessage(who, text) {
+            const container = document.getElementById('activityMsgs');
+            const el = document.createElement('div');
+            el.className = 'msg';
+            el.innerHTML = `<i class="fa fa-user"></i> <strong>${escapeHtml(who)}:</strong> ${escapeHtml(text)}`;
+            container.prepend(el);
+        }
+
+        refreshParticipantsBtn.addEventListener('click', () => {
+            socket.emit('request-participants', currentSessionCode);
+        });
+
+        // Receive participant list
+        socket.on('participant-list', list => {
+            const ul = document.getElementById('quizParticipantsList');
+            if (!ul) return;
+            if (!Array.isArray(list)) list = [];
+            ul.innerHTML = list.map(p => `<li><i class="fa fa-user"></i> ${escapeHtml(p.name)} ${p.cameraOn ? ' <span style="color:green;">(camera)</span>' : ''}</li>`).join('');
+            document.getElementById('studentsListSimple').innerHTML = list.map(p => `<li><i class="fa fa-user"></i> ${escapeHtml(p.name)}</li>`).join('');
+        });
+
+        // Students answer event: store in the current question and show live
+        socket.on('student-answer', data => {
+            // data expected: { code, questionId, student, answer, ts }
+            addAnswerToList(data.student, data.answer, data.ts);
+
+            // store the answer in the matching question object
+            const q = sentQuestions.find(x => x.id === data.questionId);
+            if (q) {
+                q.answers = q.answers || [];
+                q.answers.push({ student: data.student, answer: data.answer, ts: data.ts });
+                renderSentQuestions();
+            } else {
+                // If question not found, optionally create a temp entry
+                console.warn('Answer received for unknown question', data.questionId);
+            }
+        });
+
+        // Optional: quiz events from server
+        socket.on('quiz-started', info => {
+            // info may contain code, startedBy etc.
+            addActivityMessage('System', 'Quiz started by server');
+        });
+
+        socket.on('quiz-ended', info => {
+            addActivityMessage('System', 'Quiz ended by server');
+            // disable UI
+            startQuizBtn.disabled = false;
+            endQuizBtn.disabled = true;
+            sendQuestionBtn.disabled = true;
+            sendOptionsBtn.disabled = true;
+            quizSessionCodeSpan.textContent = '-';
+        });
+
+        // When server confirms question options are distributed
+        socket.on('options-distributed', payload => {
+            // payload: { questionId, code }
+            addActivityMessage('System', `Options distributed for ${payload.questionId}`);
+            // mark question as optionsSent
+            const q = sentQuestions.find(x => x.id === payload.questionId);
+            if (q) {
+                q.optionsSentAt = new Date().toISOString();
+                renderSentQuestions();
+            }
+        });
+
+        // When server notifies that question closed
+        socket.on('question-closed', payload => {
+            const q = sentQuestions.find(x => x.id === payload.questionId);
+            if (q) {
+                q.status = 'ended';
+                renderSentQuestions();
+            }
+        });
+
+        // Basic error handling
+        socket.on('error', msg => {
+            console.error('Socket error', msg);
+            if (msg && msg.message) alert('Socket error: ' + msg.message);
+        });
+
+        // Initialize UI state
+        renderSentQuestions();
+
+        /* ------------------------------
+           Misc helpers to support older code
+           ------------------------------ */
+        // Some earlier code used quiz-related sample list; we've removed it intentionally.
+
     </script>
 </body>
 </html>
