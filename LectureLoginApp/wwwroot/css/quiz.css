@@ -1,0 +1,283 @@
+/* Quiz Management Page Styles */
+
+.quiz-container {
+	padding: 30px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.page-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.page-header h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.btn-primary {
+	padding: 12px 24px;
+	background: #007bff;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+/* Quiz Controls */
+.quiz-controls {
+	display: flex;
+	gap: 15px;
+	margin-bottom: 30px;
+	flex-wrap: wrap;
+}
+
+.search-input,
+.filter-select {
+	padding: 10px 15px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 14px;
+	min-width: 200px;
+}
+
+.search-input:focus,
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Quizzes List */
+.quizzes-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
+}
+
+.quiz-card {
+	background: white;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	padding: 20px;
+	transition: all 0.3s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.quiz-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    border-color: #007bff;
+}
+
+.quiz-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
+	margin-bottom: 15px;
+}
+
+.quiz-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+	margin: 0;
+}
+
+.quiz-status {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.quiz-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.quiz-status.completed {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.quiz-status.draft {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.quiz-info {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.info-item {
+	font-size: 13px;
+	color: #666;
+}
+
+.info-item strong {
+    display: block;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.quiz-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.quiz-actions button {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.quiz-actions button:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.quiz-actions button.delete:hover {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* Loading State */
+.loading-state {
+	text-align: center;
+	padding: 60px 20px;
+	color: #999;
+	font-size: 16px;
+	background: #f8f9fa;
+	border-radius: 10px;
+	border: 2px dashed #ddd;
+}
+
+.no-quizzes {
+	text-align: center;
+	padding: 60px 20px;
+	color: #999;
+	font-size: 16px;
+}
+
+.no-quizzes i {
+    font-size: 48px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.quiz-container {
+		padding: 20px;
+	}
+
+	.page-header {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.btn-primary {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.quiz-controls {
+		flex-direction: column;
+	}
+
+	.search-input,
+	.filter-select {
+		width: 100%;
+		min-width: unset;
+	}
+
+	.quizzes-list {
+		grid-template-columns: 1fr;
+	}
+
+	.quiz-info {
+		grid-template-columns: 1fr;
+	}
+
+	.quiz-actions {
+		flex-direction: column;
+	}
+}
+
+/* =========================================================
+   TEACHER QUIZ UI STYLES  
+========================================================= */
+
+#teacherQuizPanel {
+	background: white;
+	padding: 25px;
+	margin-top: 25px;
+	border-radius: 12px;
+	border: 1px solid #e5e5e5;
+	box-shadow: 0px 3px 18px rgba(0,0,0,0.06);
+	display: none;
+	animation: fadeSlide 0.4s ease;
+}
+
+@keyframes fadeSlide {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.quiz-form-section {
+	margin-bottom: 25px;
+}
+
+.quiz-form-section h3 {
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+}

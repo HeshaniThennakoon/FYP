@@ -1,0 +1,241 @@
+.alerts-container {
+	padding: 30px;
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.alerts-container h2 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* Filter Buttons */
+.alert-filters {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 25px;
+	flex-wrap: wrap;
+}
+
+.filter-btn {
+	padding: 10px 20px;
+	border: 2px solid #ddd;
+	background: white;
+	border-radius: 25px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	color: #666;
+}
+
+.filter-btn:hover {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.filter-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Action Buttons */
+.alert-actions {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 25px;
+	justify-content: flex-end;
+}
+
+.mark-all-read-btn {
+	padding: 10px 20px;
+	background: #28a745;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.mark-all-read-btn:hover {
+    background: #218838;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.mark-all-read-btn:active {
+    transform: translateY(1px);
+}
+
+/* Alerts List */
+.alerts-list {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.alert-item {
+	background: white;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	padding: 20px;
+	transition: all 0.3s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.alert-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: #007bff;
+}
+
+.alert-item.read {
+    opacity: 0.6;
+    background: #f8f9fa;
+}
+
+/* Alert Header */
+.alert-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 15px;
+}
+
+.alert-info h4 {
+	margin: 0 0 8px 0;
+	color: #333;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.alert-type {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.alert-type.drowsiness_alert {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.alert-type.behavioral_alert {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-time {
+	color: #999;
+	font-size: 13px;
+	font-weight: 500;
+}
+
+/* Alert Actions */
+.alert-item .alert-actions {
+	display: flex;
+	gap: 10px;
+	margin: 0;
+	justify-content: flex-end;
+}
+
+.read-alert-btn {
+	padding: 8px 16px;
+	background: #007bff;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.read-alert-btn:hover {
+    background: #0056b3;
+    box-shadow: 0 2px 8px rgba(0, 86, 179, 0.3);
+}
+
+.read-alert-btn:active {
+    transform: translateY(1px);
+}
+
+/* No Alerts State */
+.no-alerts {
+	text-align: center;
+	padding: 60px 20px;
+	color: #999;
+	font-size: 16px;
+	background: #f8f9fa;
+	border-radius: 10px;
+	border: 2px dashed #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.alerts-container {
+		padding: 20px;
+	}
+
+	.alert-header {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.alert-filters {
+		flex-direction: column;
+	}
+
+	.filter-btn {
+		width: 100%;
+		text-align: center;
+	}
+
+	.alert-actions {
+		flex-direction: column;
+	}
+
+	.mark-all-read-btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.read-alert-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+/* Animation for alert removal */
+@keyframes slideOut {
+	from {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	to {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+}
+
+.alert-item.removing {
+	animation: slideOut 0.3s ease-out forwards;
+}

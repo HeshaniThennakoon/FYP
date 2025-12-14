@@ -102,8 +102,8 @@ body {
     text-align: center;
 }
 .video-box {
-    width: 480px;
-    height: 280px;
+    width:640px; 
+    height:480px;
     background: #ddd;
     border-radius: 12px;
     margin: auto;
@@ -127,6 +127,19 @@ body {
     transition: 0.3s;
 }
 .btn-share:hover {
+    background: #6d28d9;
+}
+.btn-stop {
+    margin-left: 15px;
+    padding: 8px 18px;
+    background: #8b5cf6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-stop:hover {
     background: #6d28d9;
 }
 
