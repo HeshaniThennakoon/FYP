@@ -74,8 +74,7 @@
                                 }
 
                                 try {
-                                    const payload = JSON.parse(atob(token.split('.')[1]));
-                                    const studentName = payload.username;
+                                    const studentName = localStorage.getItem("name");
 
                                     console.log('Starting sharing for:', studentName);
 
@@ -122,8 +121,7 @@
                                 }
 
                                 try {
-                                    const payload = JSON.parse(atob(token.split('.')[1]));
-                                    const studentName = payload.username;
+                                    const studentName = localStorage.getItem("name");
 
                                     console.log('Stopping sharing for:', studentName);
 

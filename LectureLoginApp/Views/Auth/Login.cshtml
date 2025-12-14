@@ -85,6 +85,12 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
 
+            // EXTRACT DATA FROM JWT
+            const payload = JSON.parse(atob(data.token.split('.')[1]));
+
+            localStorage.setItem("userId", payload.userId);
+            localStorage.setItem("name", payload.name);
+
             // Redirect based on role
             if (data.role === "teacher") {
                 window.location.href = "/Teacher/Dashboard";
