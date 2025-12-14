@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Report & Analytics Page Styles */
+=======
+﻿/* Report & Analytics Page Styles */
+>>>>>>> origin/dilsha
 
 .report-container {
 	padding: 30px;
@@ -6,6 +10,7 @@
 	margin: 0 auto;
 }
 
+<<<<<<< HEAD
 .report-container h2 {
     color: #333;
     font-size: 28px;
@@ -19,6 +24,21 @@
     font-weight: 600;
     margin: 30px 0 20px 0;
 }
+=======
+	.report-container h2 {
+		color: #333;
+		font-size: 28px;
+		font-weight: 600;
+		margin: 0 0 30px 0;
+	}
+
+	.report-container h3 {
+		color: #333;
+		font-size: 18px;
+		font-weight: 600;
+		margin: 30px 0 20px 0;
+	}
+>>>>>>> origin/dilsha
 
 /* Date Range Picker */
 .date-range {
@@ -35,11 +55,19 @@
 	font-size: 14px;
 }
 
+<<<<<<< HEAD
 .date-input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
+=======
+	.date-input:focus {
+		outline: none;
+		border-color: #007bff;
+		box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+	}
+>>>>>>> origin/dilsha
 
 .btn-secondary {
 	padding: 10px 20px;
@@ -53,10 +81,17 @@
 	transition: all 0.3s ease;
 }
 
+<<<<<<< HEAD
 .btn-secondary:hover {
     background: #5a6268;
     box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
 }
+=======
+	.btn-secondary:hover {
+		background: #5a6268;
+		box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+	}
+>>>>>>> origin/dilsha
 
 /* Statistics Grid */
 .stats-grid {
@@ -78,10 +113,17 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+<<<<<<< HEAD
 .stat-card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
 }
+=======
+	.stat-card:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		transform: translateY(-2px);
+	}
+>>>>>>> origin/dilsha
 
 .stat-icon {
 	width: 60px;
@@ -94,6 +136,7 @@
 	flex-shrink: 0;
 }
 
+<<<<<<< HEAD
 .stat-icon.attendance {
     background: #e7f3ff;
     color: #0066cc;
@@ -108,6 +151,22 @@
     background: #ffe0e0;
     color: #dc3545;
 }
+=======
+	.stat-icon.attendance {
+		background: #e7f3ff;
+		color: #0066cc;
+	}
+
+	.stat-icon.drowsy {
+		background: #fff3e0;
+		color: #ff9800;
+	}
+
+	.stat-icon.behavior {
+		background: #ffe0e0;
+		color: #dc3545;
+	}
+>>>>>>> origin/dilsha
 
 .stat-content h4 {
 	margin: 0 0 8px 0;
@@ -141,9 +200,15 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+<<<<<<< HEAD
 .chart-container h3 {
     margin-top: 0;
 }
+=======
+	.chart-container h3 {
+		margin-top: 0;
+	}
+>>>>>>> origin/dilsha
 
 .chart-placeholder {
 	background: #f8f9fa;
@@ -178,6 +243,7 @@
 	font-size: 14px;
 }
 
+<<<<<<< HEAD
 .data-table thead {
     background: #f8f9fa;
     border-bottom: 2px solid #dee2e6;
@@ -202,6 +268,32 @@
 .data-table tbody tr:hover {
     background: #f8f9fa;
 }
+=======
+	.data-table thead {
+		background: #f8f9fa;
+		border-bottom: 2px solid #dee2e6;
+	}
+
+	.data-table th {
+		padding: 12px 15px;
+		text-align: left;
+		font-weight: 600;
+		color: #333;
+		text-transform: uppercase;
+		font-size: 12px;
+		letter-spacing: 0.5px;
+	}
+
+	.data-table td {
+		padding: 15px;
+		border-bottom: 1px solid #e0e0e0;
+		color: #666;
+	}
+
+	.data-table tbody tr:hover {
+		background: #f8f9fa;
+	}
+>>>>>>> origin/dilsha
 
 .status-badge {
 	display: inline-block;
@@ -212,6 +304,7 @@
 	text-transform: uppercase;
 }
 
+<<<<<<< HEAD
 .status-badge.good {
     background: #d4edda;
     color: #155724;
@@ -226,6 +319,22 @@
     background: #f8d7da;
     color: #721c24;
 }
+=======
+	.status-badge.good {
+		background: #d4edda;
+		color: #155724;
+	}
+
+	.status-badge.warning {
+		background: #fff3cd;
+		color: #856404;
+	}
+
+	.status-badge.poor {
+		background: #f8d7da;
+		color: #721c24;
+	}
+>>>>>>> origin/dilsha
 
 /* Report Actions */
 .report-actions {
@@ -235,11 +344,19 @@
 	flex-wrap: wrap;
 }
 
+<<<<<<< HEAD
 .report-actions .btn-secondary {
     display: flex;
     align-items: center;
     gap: 8px;
 }
+=======
+	.report-actions .btn-secondary {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+>>>>>>> origin/dilsha
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -288,8 +405,16 @@
 		flex-direction: column;
 	}
 
+<<<<<<< HEAD
     .report-actions .btn-secondary {
         width: 100%;
         justify-content: center;
     }
 }
+=======
+		.report-actions .btn-secondary {
+			width: 100%;
+			justify-content: center;
+		}
+}
+>>>>>>> origin/dilsha
