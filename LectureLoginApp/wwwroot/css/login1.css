@@ -34,7 +34,6 @@ body {
     object-fit: cover;
 }
 
-
 .login-box {
     flex: 0 0 400px;      
     display: flex;        
@@ -43,14 +42,12 @@ body {
     align-items: center;     
     padding: 40px;
     background: #fff;
-    height: 80vh;            
+    height: 50vh;            
     margin-right: 40px;       
     margin-left: 40px;        
     border-radius: 16px;     
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
-
-
 
 .login-box h2 {
     text-align: center;
@@ -107,25 +104,30 @@ body {
 
 /* Video Section */
 .video-section {
-    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
 }
 .video-box {
-    width:640px; 
-    height:480px;
+    width:480px; 
+    height:380px;
     background: #ddd;
     border-radius: 12px;
     margin: auto;
 }
 .controls {
-    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;          /* spacing between buttons */
+    margin-top: 10px;  /* space below LOG IN title */
 }
 .controls i {
     margin: 0 8px;
     font-size: 18px;
-    color: #7c3aed;
+    color: #000000;
 }
-.btn-share {
-    margin-left: 15px;
+.btn-share,
+.btn-share stop {
     padding: 8px 18px;
     background: #8b5cf6;
     border: none;
@@ -133,8 +135,11 @@ body {
     color: white;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 14px;
 }
-.btn-share:hover {
+
+.btn-share:hover,
+.btn-share stop:hover {
     background: #6d28d9;
 }
 
@@ -144,7 +149,6 @@ body {
     text-align: center;
     margin-top: 10px;
 }
-
 
 .forgot-password {
     width: 100%;

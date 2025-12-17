@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
-    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="~/css/login1.css" />
 </head>
 
 <body>
@@ -27,7 +27,17 @@
             <form id="LoginForm" method="post">
                 <h2>LOG IN</h2>
 
-                <input type="text" id="email" name="email" placeholder="youremail@mail.com" required />
+                <div class="video-section">
+                    <div class="controls">
+                        <i class="fa fa-camera"></i>
+                        <i class="fa fa-microphone"></i>
+                        <button class="btn-share" id="startSharingBtn">
+                            <i class="fas fa-share-square"></i> Start Sharing
+                        </button>
+                    </div>
+                </div>    
+
+                <input type="text" id="email" name="email" placeholder="youremail@mail.com" readonly required />
                 <input type="password" id="password" name="password" placeholder="********" required />
 
                 <div class="forgot-password">
@@ -63,7 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Clear previous error
         errorMsg.textContent = "";
 
-        const email = document.getElementById("email").value;
+        const email = document.getElementById("email").value.trim();
+        if (!email) {
+            errorMsg.textContent = "Please complete face verification first.";
+            return;
+        }
         const password = document.getElementById("password").value;
         const role = document.querySelector('input[name="role"]:checked').value;
 
@@ -103,8 +117,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+document.getElementById("startSharingBtn").addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    try {
+        const response = await fetch("http://localhost:5001/start-face-login", {
+            method: "POST"
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            document.getElementById("email").value = data.email;
+            document.getElementById("password").focus();
+        } else {
+            alert("Face not recognized");
+        }
+    } catch (err) {
+        alert("Face service not running");
+    }
+});
+
 </script>
-
-
 
 </html>

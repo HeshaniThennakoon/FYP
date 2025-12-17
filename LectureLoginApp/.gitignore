@@ -1,2 +1,10 @@
-\bin
-\obj
+bin/
+obj/
+
+.vs/
+*.user
+*.suo
+*.cache
+*.log
+
+appsettings.Development.json
