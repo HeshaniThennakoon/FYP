@@ -1,3 +1,4 @@
+/* General body styles */
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
@@ -8,6 +9,7 @@ body {
     height: 100vh;
 }
 
+/* Main container */
 .container {
     display: flex;
     width: 100%;
@@ -20,6 +22,7 @@ body {
     overflow: hidden;
 }
 
+/* Illustration section */
 .illustration {
     flex: 1;
     display: flex;
@@ -34,6 +37,7 @@ body {
     object-fit: cover;
 }
 
+/* Login box */
 .login-box {
     flex: 0 0 400px;      
     display: flex;        
@@ -42,11 +46,12 @@ body {
     align-items: center;     
     padding: 40px;
     background: #fff;
-    height: 50vh;            
-    margin-right: 40px;       
-    margin-left: 40px;        
+    height: auto;            
+    margin: 0 40px;      
     border-radius: 16px;     
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 350px; /* Ensure consistent width */
 }
 
 .login-box h2 {
@@ -55,34 +60,38 @@ body {
     color: #6b21a8;
 }
 
-.login-box input {
+/* Input fields and buttons same width */
+.login-box input,
+.login-box button {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     padding: 12px;
     margin: 10px 0;
     border-radius: 8px;
     border: 1px solid #ddd;
+    font-size: 14px;
 }
 
 .login-box button {
-    width: 100%;
-    padding: 12px;
     border: none;
     background: #9333ea;
     color: white;
-    font-size: 16px;
-    border-radius: 8px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 .login-box button:hover {
     background: #6b21a8;
 }
 
+/* Role toggle */
 .role-toggle {
     display: flex;
     justify-content: center;
     gap: 20px;   
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .role-toggle label {
@@ -91,6 +100,8 @@ body {
     background: #f3e8ff;
     cursor: pointer;
     transition: 0.3s;
+    text-align: center;
+    flex: 1;
 }
 
 .role-toggle input[type="radio"] {
@@ -107,25 +118,30 @@ body {
     width: 100%;
     margin-bottom: 20px;
 }
+
 .video-box {
-    width:480px; 
-    height:380px;
+    width: 100%;
+    max-width: 480px;
+    height: 380px;
     background: #ddd;
     border-radius: 12px;
-    margin: auto;
+    margin: 0 auto;
 }
+
 .controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;          /* spacing between buttons */
-    margin-top: 10px;  /* space below LOG IN title */
+    gap: 15px;
+    margin-top: 10px;
 }
+
 .controls i {
     margin: 0 8px;
     font-size: 18px;
-    color: #000000;
+    color: #fff;
 }
+
 .btn-share,
 .btn-share stop {
     padding: 8px 18px;
@@ -143,13 +159,14 @@ body {
     background: #6d28d9;
 }
 
-
+/* Error messages */
 .error {
     color: red;
     text-align: center;
     margin-top: 10px;
 }
 
+/* Forgot password */
 .forgot-password {
     width: 100%;
     text-align: right;
@@ -168,6 +185,7 @@ body {
     color: #6b21a8;
 }
 
+/* Signup link */
 .signup-link {
     width: 100%;
     text-align: center;
@@ -189,4 +207,9 @@ body {
 .signup-link a:hover {
     text-decoration: underline;
     color: #6b21a8;
+}
+
+/* Hide video section for teacher mode */
+body.teacher-mode .video-section {
+    display: none;
 }

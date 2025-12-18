@@ -7,7 +7,8 @@
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
-    <link rel="stylesheet" href="~/css/login1.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
 <body>
@@ -27,12 +28,11 @@
             <form id="LoginForm" method="post">
                 <h2>LOG IN</h2>
 
-                <div class="video-section">
+                <!-- Video Section for Students -->
+                <div class="video-section" id="videoSection">
                     <div class="controls">
-                        <i class="fa fa-camera"></i>
-                        <i class="fa fa-microphone"></i>
-                        <button class="btn-share" id="startSharingBtn">
-                            <i class="fas fa-share-square"></i> Start Sharing
+                        <button class="btn-share" id="startSharingBtn">                            
+                        <i class="fa fa-camera"></i> Start Sharing
                         </button>
                     </div>
                 </div>    
@@ -60,26 +60,50 @@
 
         </div>
     </div>
-</body>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById("LoginForm");
     const errorMsg = document.getElementById("error");
+    const startSharingBtn = document.getElementById("startSharingBtn");
+    const videoSection = document.getElementById("videoSection");
+    const roleRadios = document.querySelectorAll('input[name="role"]');
+    const emailInput = document.getElementById("email");
+
+    // Toggle video section & email editability based on role
+    roleRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            if (this.value === "Student") {
+                videoSection.style.display = "block";
+                emailInput.readOnly = true;
+                emailInput.value = "";
+            } else {
+                videoSection.style.display = "none";
+                emailInput.readOnly = false;
+                emailInput.value = "";
+            }
+        });
+    });
 
     loginForm.addEventListener("submit", async function (e) {
         e.preventDefault();
-
-        // Clear previous error
         errorMsg.textContent = "";
 
-        const email = document.getElementById("email").value.trim();
+        const role = document.querySelector('input[name="role"]:checked').value;
+        let email = emailInput.value.trim();
+        const password = document.getElementById("password").value;
+
+        // Validation
         if (!email) {
-            errorMsg.textContent = "Please complete face verification first.";
+            errorMsg.textContent = role === "Student" 
+                ? "Please complete face verification first." 
+                : "Please enter your email.";
             return;
         }
-        const password = document.getElementById("password").value;
-        const role = document.querySelector('input[name="role"]:checked').value;
+        if (!password) {
+            errorMsg.textContent = "Please enter your password.";
+            return;
+        }
 
         try {
             const response = await fetch("http://localhost:3000/api/user/login", {
@@ -95,13 +119,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Save token
+            // Save token & payload
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
-
-            // EXTRACT DATA FROM JWT
             const payload = JSON.parse(atob(data.token.split('.')[1]));
-
             localStorage.setItem("userId", payload.userId);
             localStorage.setItem("name", payload.name);
 
@@ -116,29 +137,32 @@ document.addEventListener('DOMContentLoaded', function () {
             errorMsg.textContent = "Server error. Please try again later.";
         }
     });
-});
 
-document.getElementById("startSharingBtn").addEventListener("click", async function (e) {
-    e.preventDefault();
+    // Student face login only
+    startSharingBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
 
-    try {
-        const response = await fetch("http://localhost:5001/start-face-login", {
-            method: "POST"
-        });
+        const role = document.querySelector('input[name="role"]:checked').value;
+        if (role !== "Student") return;
 
-        const data = await response.json();
+        try {
+            const response = await fetch("http://localhost:5001/start-face-login", {
+                method: "POST"
+            });
+            const data = await response.json();
 
-        if (data.success) {
-            document.getElementById("email").value = data.email;
-            document.getElementById("password").focus();
-        } else {
-            alert("Face not recognized");
+            if (data.success) {
+                emailInput.value = data.email;
+                document.getElementById("password").focus();
+            } else {
+                alert("Face not recognized");
+            }
+        } catch (err) {
+            alert("Face service not running");
         }
-    } catch (err) {
-        alert("Face service not running");
-    }
+    });
 });
-
 </script>
 
+</body>
 </html>
